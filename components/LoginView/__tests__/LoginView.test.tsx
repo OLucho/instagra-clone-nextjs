@@ -1,18 +1,37 @@
-import { screen, fireEvent, render } from '@testing-library/react'
-import {LoginView} from '@/components/LoginView'
+import { screen, fireEvent, render, waitFor } from '@testing-library/react'
+import { LoginView } from '@/components/LoginView'
+import { act } from 'react-dom/test-utils'
 
 describe("LoginView", () => {
-  it("Renders Correctly", () => {
-    const component = render(<LoginView/>)
-    
+  it("Forms validates correctly", async () => {
+    const component = render(<LoginView />)
+
     const emailInput = component.getByTestId("email-input")
     const passwordInput = component.getByTestId("password-input")
+    const buttonSubmit = component.getByTestId("button-submit")
 
-    fireEvent.change(emailInput, {target: {value: "email@email.com"}})
-    fireEvent.change(passwordInput, {target: {value: "123456"}})
+    act(() => {
+      fireEvent.change(emailInput, { target: { value: "email" } })
+      fireEvent.change(passwordInput, { target: { value: "1234" } })
+      fireEvent.click(buttonSubmit)
+    })
+    await waitFor(() => {
+      expect(buttonSubmit).toBeDisabled()
+      expect(screen.getByDisplayValue("email")).toBeInTheDocument()
+      expect(screen.getByText("Invalid email")).toBeInTheDocument()
+      expect(screen.getByText("Password must be at least 5 characters")).toBeInTheDocument()
+    })
 
-    expect(screen.getByDisplayValue("email@email.com")).toBeInTheDocument()
-    expect(screen.getByDisplayValue("123456")).toBeInTheDocument()
-
+    act(() => {
+      fireEvent.change(emailInput, { target: { value: "email@valid.com" } })
+      fireEvent.change(passwordInput, { target: { value: "123456" } })
+      fireEvent.click(buttonSubmit)
+    })
+    await waitFor(() => {
+      expect(buttonSubmit).toBeEnabled()
+      expect(screen.getByDisplayValue("email@valid.com")).toBeInTheDocument()
+      expect(() => screen.getByText('Invalid email')).toThrow('Unable to find an element');
+      expect(() => screen.getByText('Password must be at least 5 characters')).toThrow('Unable to find an element');
+    })
   })
 })
