@@ -1,10 +1,10 @@
 import styles from '@/pages/index.module.css'
-import { LoginView } from '@/components/LoginView';
-import { useEffect, useState } from 'react';
+import { LoginView } from '@/components/LoginView'
+import { useEffect, useState } from 'react'
 
 interface User { }
 
-export default function IndexPage() {
+export default function IndexPage () {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
@@ -23,5 +23,3 @@ export default function IndexPage() {
   }
   return renderPage()
 }
-
-

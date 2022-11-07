@@ -1,23 +1,24 @@
 import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik"
+import React from "react"
 
 export const LoginView = () => {
-    const initialValues = {
-        email: "",
-        password: "",
-    }
+  const initialValues = {
+    email: "",
+    password: ""
+  }
 
-    const loginSchema = Yup.object().shape({
-        email: Yup.string().email('Invalid email').required('Required'),
-        password: Yup.string().required('Required').min(5, 'Password must be at least 5 characters')
-            .max(20, 'Password must be less than 20 characters')
-    })
+  const loginSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().required('Required').min(5, 'Password must be at least 5 characters')
+      .max(20, 'Password must be less than 20 characters')
+  })
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-    }
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  }
 
-    return (
+  return (
         <div>
             <h1>Instagram</h1>
             <Formik
@@ -51,7 +52,7 @@ export const LoginView = () => {
                         <button
                             data-testid="button-submit"
                             type="submit"
-                            disabled={!(formik.dirty && formik.isValid)}>                            
+                            disabled={!(formik.dirty && formik.isValid)}>
                             Log in
                         </button>
                     </Form>
@@ -59,5 +60,5 @@ export const LoginView = () => {
                 }
             </Formik>
         </div>
-    )
+  )
 }

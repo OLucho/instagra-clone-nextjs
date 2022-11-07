@@ -1,15 +1,21 @@
 {
   "root": true,
-  "extends": ["next/core-web-vitals"],
+  "extends": ["standard", "next/core-web-vitals"],
   "plugins": ["testing-library"],
+  "env": {
+    "jest": true,
+    "browser": true,
+    "node": true
+  },
   "overrides": [
     // Only uses Testing Library lint rules in test files
     {
-      "files": [
-        "**/__tests__/**/*.[jt]s?(x)",
-        "**/?(*.)+(spec|test).[jt]s?(x)"
-      ],
-      "extends": ["plugin:testing-library/react"]
+      "files": ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"]
     }
-  ]
+  ],
+  "rules": {
+    "quotes": "off",
+    "react/react-in-jsx-scope": 0,
+    "comma-dangle": "off"
+  }
 }

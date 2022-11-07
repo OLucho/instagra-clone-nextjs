@@ -30,8 +30,8 @@ describe("LoginView", () => {
     await waitFor(() => {
       expect(buttonSubmit).toBeEnabled()
       expect(screen.getByDisplayValue("email@valid.com")).toBeInTheDocument()
-      expect(() => screen.getByText('Invalid email')).toThrow('Unable to find an element');
-      expect(() => screen.getByText('Password must be at least 5 characters')).toThrow('Unable to find an element');
+      expect(() => screen.getByText('Invalid email')).toThrow('Unable to find an element')
+      expect(() => screen.getByText('Password must be at least 5 characters')).toThrow('Unable to find an element')
     })
   })
 })
