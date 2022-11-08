@@ -5,7 +5,6 @@ export default function Document () {
     <Html>
       <Head >
       <link rel="icon" href="/favicon.ico" />
-      <title>Create Next App</title>
       </Head>
       <body>
         <Main />

@@ -23,6 +23,7 @@ export const LoginView = () => {
             <h1>Instagram</h1>
             <Formik
                 onSubmit={onSubmit}
+                // @ts-ignore
                 initialValues={initialValues}
                 validationSchema={loginSchema}
             >
@@ -46,7 +47,7 @@ export const LoginView = () => {
                                     data-testid="password-input"
                                     id="password"
                                 />
-                                <ErrorMessage name="password" component="span" data-testid="password"/>
+                                <ErrorMessage name="password" component="span" data-testid="password" />
                             </label>
                         </div>
                         <button

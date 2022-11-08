@@ -1,4 +1,3 @@
-import styles from '@/pages/index.module.css'
 import { LoginView } from '@/components/LoginView'
 import { useEffect, useState } from 'react'
 
@@ -14,12 +13,5 @@ export default function IndexPage () {
     }
   }, [])
 
-  const renderPage = () => {
-    if (user) {
-      return <div className={styles.container}>Home page if logged</div>
-    } else {
-      return <LoginView />
-    }
-  }
-  return renderPage()
+  return user ? <p>Home Page if user is logged</p> : <LoginView />
 }
