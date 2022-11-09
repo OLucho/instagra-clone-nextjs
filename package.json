@@ -4,11 +4,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest --watch",
+    "test": "jest --coverage",
     "test:ci": "jest --ci",
     "lint": "next lint --fix"
   },
   "dependencies": {
+    "@prisma/client": "^4.5.0",
+    "axios": "^0.27.2",
     "eslint-config-next": "^13.0.2",
     "formik": "^2.2.9",
     "next": "latest",
@@ -24,6 +26,7 @@
     "eslint-plugin-testing-library": "^5.9.1",
     "jest": "28.1.0",
     "jest-environment-jsdom": "28.1.0",
+    "prisma": "^4.5.0",
     "standard": "^17.0.0",
     "typescript": "4.6.4"
   }
