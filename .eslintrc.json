@@ -16,6 +16,7 @@
   "rules": {
     "quotes": "off",
     "react/react-in-jsx-scope": 0,
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "import/no-anonymous-default-export": "off"
   }
 }
