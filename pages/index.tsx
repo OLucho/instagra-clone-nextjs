@@ -1,13 +1,16 @@
-import { LoginView } from '@/components/LoginView'
 import { useEffect, useState } from 'react'
-
-interface User { }
+import { useTitle } from '@/common/hooks'
+import { User } from '@/common/types'
+import { LoginView } from '@/components/LoginView'
 
 export default function IndexPage () {
   const [user, setUser] = useState<User | null>(null)
 
+  useTitle(user ? `Welcome ${user.name}` : 'Instagram')
+
   useEffect(() => {
-    const user = localStorage.getItem("user")
+    // @ts-ignore
+    const user: User = JSON.parse(localStorage.getItem("user"))
     if (user) {
       setUser(user)
     }

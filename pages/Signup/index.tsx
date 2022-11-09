@@ -2,6 +2,7 @@ import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import React from "react"
 import { api } from "common/api"
+import { useTitle } from "@/common/hooks"
 
 interface UserForm {
   name: string,
@@ -11,6 +12,8 @@ interface UserForm {
 }
 
 const SignupView = () => {
+  useTitle("Create an account!")
+
   const initialValues = {
     name: "",
     username: "",
@@ -102,7 +105,7 @@ const SignupView = () => {
               data-testid="button-submit"
               type="submit"
               disabled={!(formik.dirty && formik.isValid)}>
-              Log in
+              Sign up
             </button>
           </Form>
         )

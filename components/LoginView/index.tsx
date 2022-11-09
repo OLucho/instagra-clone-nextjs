@@ -2,6 +2,7 @@ import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import React from "react"
 import { api } from "@/common/api"
+import { useTitle } from "@/common/hooks"
 
 interface UserForm {
     email: string,
@@ -9,10 +10,7 @@ interface UserForm {
 }
 
 export const LoginView = () => {
-  const initialValues = {
-    email: "",
-    password: ""
-  }
+  useTitle("Login to instagram")
 
   const loginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
@@ -39,7 +37,10 @@ export const LoginView = () => {
             <Formik
                 onSubmit={values => onSubmit(values)}
                 // @ts-ignore
-                initialValues={initialValues}
+                initialValues={{
+                  email: "",
+                  password: ""
+                }}
                 validationSchema={loginSchema}
             >
                 {(formik) => (
