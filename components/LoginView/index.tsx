@@ -1,6 +1,12 @@
 import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import React from "react"
+import { api } from "@/common/api"
+
+interface UserForm {
+    email: string,
+    password: string
+}
 
 export const LoginView = () => {
   const initialValues = {
@@ -14,15 +20,24 @@ export const LoginView = () => {
       .max(20, 'Password must be less than 20 characters')
   })
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleLogin = async (user: UserForm) => {
+    try {
+      const response = await api.post("/api/login", user)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const onSubmit = (userForm: UserForm) => {
+    handleLogin(userForm)
   }
 
   return (
         <div>
             <h1>Instagram</h1>
             <Formik
-                onSubmit={onSubmit}
+                onSubmit={values => onSubmit(values)}
                 // @ts-ignore
                 initialValues={initialValues}
                 validationSchema={loginSchema}
