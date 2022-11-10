@@ -6,13 +6,13 @@ import { rest } from "msw"
 
 describe("SignUp", () => {
   it("Forms validates correctly", async () => {
-    const component = render(<SignupView />)
+    const { getByTestId } = render(<SignupView />)
 
-    const name = component.getByTestId("name-input")
-    const username = component.getByTestId("username-input")
-    const emailInput = component.getByTestId("email-input")
-    const passwordInput = component.getByTestId("password-input")
-    const buttonSubmit = component.getByTestId("button-submit")
+    const name = getByTestId("name-input")
+    const username = getByTestId("username-input")
+    const emailInput = getByTestId("email-input")
+    const passwordInput = getByTestId("password-input")
+    const buttonSubmit = getByTestId("button-submit")
 
     act(() => {
       fireEvent.change(name, { target: { value: "Name too big 1234567" } })
@@ -62,13 +62,13 @@ describe("SignUp", () => {
     afterAll(() => server.close())
 
     it("After submit, simulates some api validation error", async () => {
-      const component = render(<SignupView />)
+      const { getByTestId } = render(<SignupView />)
 
-      const name = component.getByTestId("name-input")
-      const username = component.getByTestId("username-input")
-      const emailInput = component.getByTestId("email-input")
-      const passwordInput = component.getByTestId("password-input")
-      const buttonSubmit = component.getByTestId("button-submit")
+      const name = getByTestId("name-input")
+      const username = getByTestId("username-input")
+      const emailInput = getByTestId("email-input")
+      const passwordInput = getByTestId("password-input")
+      const buttonSubmit = getByTestId("button-submit")
 
       act(() => {
         fireEvent.change(name, { target: { value: "Name ok" } })
@@ -78,6 +78,7 @@ describe("SignUp", () => {
         fireEvent.click(buttonSubmit)
       })
       expect(buttonSubmit).toBeEnabled()
+
       await waitFor(() => {
         expect(screen.getByText("User not found")).toBeInTheDocument()
       })

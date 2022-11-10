@@ -1,14 +1,16 @@
 import { screen, fireEvent, render, waitFor } from '@testing-library/react'
 import { LoginView } from '@/components/LoginView'
 import { act } from 'react-dom/test-utils'
+import { setupServer } from 'msw/node'
+import { rest } from 'msw'
 
 describe("LoginView", () => {
   it("Forms validates correctly", async () => {
-    const component = render(<LoginView />)
+    const { getByTestId } = render(<LoginView />)
 
-    const emailInput = component.getByTestId("email-input")
-    const passwordInput = component.getByTestId("password-input")
-    const buttonSubmit = component.getByTestId("button-submit")
+    const emailInput = getByTestId("email-input")
+    const passwordInput = getByTestId("password-input")
+    const buttonSubmit = getByTestId("button-submit")
 
     act(() => {
       fireEvent.change(emailInput, { target: { value: "email" } })
@@ -32,6 +34,36 @@ describe("LoginView", () => {
       expect(screen.getByDisplayValue("email@valid.com")).toBeInTheDocument()
       expect(() => screen.getByText('Invalid email')).toThrow('Unable to find an element')
       expect(() => screen.getByText('Password must be at least 5 characters')).toThrow('Unable to find an element')
+    })
+  })
+
+  describe('Integration tests intercepting HTTP Request', () => {
+    const server = setupServer(
+      rest.post('http://localhost:3000/api/login', (_req, res, ctx) => {
+        return res(ctx.status(201), ctx.json({ error: 'User already exists' }))
+      }),
+    )
+
+    beforeAll(() => server.listen())
+    afterEach(() => server.resetHandlers())
+    afterAll(() => server.close())
+
+    it("After submit, simulates some api validation error", async () => {
+      const { getByTestId } = render(<LoginView />)
+      const emailInput = getByTestId("email-input")
+      const passwordInput = getByTestId("password-input")
+      const buttonSubmit = getByTestId("button-submit")
+
+      act(() => {
+        fireEvent.change(emailInput, { target: { value: "email@email.com" } })
+        fireEvent.change(passwordInput, { target: { value: "1234567" } })
+        fireEvent.click(buttonSubmit)
+      })
+      expect(buttonSubmit).toBeEnabled()
+
+      await waitFor(() => {
+        expect(screen.getByText("User already exists")).toBeInTheDocument()
+      })
     })
   })
 })

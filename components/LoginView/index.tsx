@@ -1,15 +1,16 @@
 import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik"
-import React from "react"
+import React, { useState } from "react"
 import { api } from "@/common/api"
 import { useTitle } from "@/common/hooks"
 
 interface UserForm {
-    email: string,
-    password: string
+  email: string,
+  password: string
 }
 
 export const LoginView = () => {
+  const [serverError, setServerError] = useState("")
   useTitle("Login to instagram")
 
   const loginSchema = Yup.object().shape({
@@ -20,8 +21,11 @@ export const LoginView = () => {
 
   const handleLogin = async (user: UserForm) => {
     try {
-      const response = await api.post("/api/login", user)
-      console.log(response)
+      const { status, data } = await api.post("/api/login", user)
+      if (status !== 200) {
+        setServerError(data.error)
+        return
+      }
     } catch (error) {
       console.log(error)
     }
@@ -32,50 +36,51 @@ export const LoginView = () => {
   }
 
   return (
-        <div>
-            <h1>Instagram</h1>
-            <Formik
-                onSubmit={values => onSubmit(values)}
-                // @ts-ignore
-                initialValues={{
-                  email: "",
-                  password: ""
-                }}
-                validationSchema={loginSchema}
-            >
-                {(formik) => (
-                    <Form>
-                        <div>
-                            <label htmlFor="email">
-                                <Field
-                                    name="email"
-                                    data-testid="email-input"
-                                    id="email"
-                                />
-                            </label>
-                            <ErrorMessage name="email" component="span" />
-                        </div>
+    <div>
+      <h1>Instagram</h1>
+      {serverError && <p>{serverError}</p>}
+      <Formik
+        onSubmit={values => onSubmit(values)}
+        // @ts-ignore
+        initialValues={{
+          email: "",
+          password: ""
+        }}
+        validationSchema={loginSchema}
+      >
+        {(formik) => (
+          <Form>
+            <div>
+              <label htmlFor="email">
+                <Field
+                  name="email"
+                  data-testid="email-input"
+                  id="email"
+                />
+              </label>
+              <ErrorMessage name="email" component="span" />
+            </div>
 
-                        <div>
-                            <label htmlFor="password">
-                                <Field
-                                    name="password"
-                                    data-testid="password-input"
-                                    id="password"
-                                />
-                                <ErrorMessage name="password" component="span" data-testid="password" />
-                            </label>
-                        </div>
-                        <button
-                            data-testid="button-submit"
-                            type="submit"
-                            disabled={!(formik.dirty && formik.isValid)}>
-                            Log in
-                        </button>
-                    </Form>
-                )
-                }
-            </Formik>
-        </div>
+            <div>
+              <label htmlFor="password">
+                <Field
+                  name="password"
+                  data-testid="password-input"
+                  id="password"
+                />
+                <ErrorMessage name="password" component="span" data-testid="password" />
+              </label>
+            </div>
+            <button
+              data-testid="button-submit"
+              type="submit"
+              disabled={!(formik.dirty && formik.isValid)}>
+              Log in
+            </button>
+          </Form>
+        )
+        }
+      </Formik>
+    </div>
   )
 }
