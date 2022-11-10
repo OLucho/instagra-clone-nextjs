@@ -1,7 +1,7 @@
 import * as Yup from "yup"
 import { Formik, Form, Field, ErrorMessage } from "formik"
-import React from "react"
-import { api } from "common/api"
+import React, { useState } from "react"
+import { api } from "@/common/api"
 import { useTitle } from "@/common/hooks"
 
 interface UserForm {
@@ -12,6 +12,8 @@ interface UserForm {
 }
 
 const SignupView = () => {
+  const [serverError, setServerError] = useState(false)
+
   useTitle("Create an account!")
 
   const initialValues = {
@@ -29,22 +31,19 @@ const SignupView = () => {
       .max(20, 'Password must be less than 20 characters')
   })
 
-  const saveUser = async (user: UserForm) => {
-    try {
-      const response = await api.post("/api/createUser", user)
-      console.log(response)
-    } catch (error) {
-      console.log(error)
+  const onSubmit = async (user: UserForm) => {
+    const { data, status } = await api.post("/api/createUser", user)
+    if (status !== 200) {
+      setServerError(data.error)
+      return
     }
-  }
 
-  const onSubmit = (user: UserForm) => {
-    saveUser(user)
+    setServerError(false)
   }
-
   return (
     <div>
       <h1>Create your Instagram Account!</h1>
+      {serverError && <p>{serverError}</p>}
       <Formik
         onSubmit={(values) => onSubmit(values)}
         // @ts-ignore

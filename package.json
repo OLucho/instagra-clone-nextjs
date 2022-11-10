@@ -4,8 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest --coverage",
-    "test:ci": "jest --ci",
+    "test": "jest --watch",
+    "test:coverage": "jest --coverage",
     "lint": "next lint --fix"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "eslint-plugin-testing-library": "^5.9.1",
     "jest": "28.1.0",
     "jest-environment-jsdom": "28.1.0",
+    "msw": "^0.48.1",
     "prisma": "^4.5.0",
     "standard": "^17.0.0",
     "typescript": "4.6.4"

@@ -3,7 +3,7 @@ import IndexPage from '@/pages/index'
 
 describe("Index Page", () => {
   it("Renders Correctly if user is Logged in", () => {
-    Storage.prototype.getItem = jest.fn(() => "user object")
+    Storage.prototype.getItem = jest.fn(() => "{}")
 
     const component = render(<IndexPage />)
 
