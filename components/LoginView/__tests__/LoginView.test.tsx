@@ -6,7 +6,8 @@ import { rest } from 'msw'
 
 describe("LoginView", () => {
   it("Forms validates correctly", async () => {
-    const { getByTestId } = render(<LoginView />)
+    const setUserMock = jest.fn()
+    const { getByTestId } = render(<LoginView setUser={setUserMock} />)
 
     const emailInput = getByTestId("email-input")
     const passwordInput = getByTestId("password-input")
@@ -38,9 +39,10 @@ describe("LoginView", () => {
   })
 
   describe('Integration tests intercepting HTTP Request', () => {
+    const ERROR_MESSAGE = 'User already exists'
     const server = setupServer(
       rest.post('http://localhost:3000/api/login', (_req, res, ctx) => {
-        return res(ctx.status(201), ctx.json({ error: 'User already exists' }))
+        return res(ctx.status(201), ctx.json({ error: ERROR_MESSAGE }))
       }),
     )
 
@@ -49,7 +51,8 @@ describe("LoginView", () => {
     afterAll(() => server.close())
 
     it("After submit, simulates some api validation error", async () => {
-      const { getByTestId } = render(<LoginView />)
+      const setUserMock = jest.fn()
+      const { getByTestId } = render(<LoginView setUser={setUserMock} />)
       const emailInput = getByTestId("email-input")
       const passwordInput = getByTestId("password-input")
       const buttonSubmit = getByTestId("button-submit")
@@ -62,7 +65,8 @@ describe("LoginView", () => {
       expect(buttonSubmit).toBeEnabled()
 
       await waitFor(() => {
-        expect(screen.getByText("User already exists")).toBeInTheDocument()
+        expect(screen.getByText(ERROR_MESSAGE)).toBeInTheDocument()
+        expect(setUserMock).toHaveBeenCalledTimes(0)
       })
     })
   })

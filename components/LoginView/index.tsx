@@ -3,13 +3,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik"
 import React, { useState } from "react"
 import { api } from "@/common/api"
 import { useTitle } from "@/common/hooks"
+import { User } from "@/common/types"
 
 interface UserForm {
   email: string,
   password: string
 }
 
-export const LoginView = () => {
+export const LoginView = ({ setUser }: {setUser: React.Dispatch<React.SetStateAction<User | null>>}) => {
   const [serverError, setServerError] = useState("")
   useTitle("Login to instagram")
 
@@ -20,21 +21,17 @@ export const LoginView = () => {
   })
 
   const handleLogin = async (user: UserForm) => {
-    try {
-      const { status, data } = await api.post("/api/login", user)
-      if (status !== 200) {
-        setServerError(data.error)
-        return
-      }
-    } catch (error) {
-      console.log(error)
+    const { status, data } = await api.post("/api/login", user)
+    if (status !== 200) {
+      setServerError(data.error)
+      return
     }
+    setUser(data.user)
+    localStorage.setItem("user", JSON.stringify(data.user))
   }
-
   const onSubmit = (userForm: UserForm) => {
     handleLogin(userForm)
   }
-
   return (
     <div>
       <h1>Instagram</h1>
