@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const savedUser = await db.user.create({ data: user })
 
-    return res.status(200).json(savedUser)
+    return res.status(200).json({ user: savedUser })
   } catch (error) {
     return res.status(402).json({ error: true, message: error })
   }

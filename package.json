@@ -9,6 +9,7 @@
     "lint": "next lint --fix"
   },
   "dependencies": {
+    "@nextui-org/react": "^1.0.0-beta.10",
     "@prisma/client": "^4.5.0",
     "axios": "^0.27.2",
     "eslint-config-next": "^13.0.2",

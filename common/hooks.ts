@@ -12,7 +12,7 @@ export const useUser = () => {
 
   useEffect(() => {
     // @ts-ignore
-    const user: User = JSON.parse(localStorage.getItem("user"))
+    const user: User = JSON?.parse(localStorage?.getItem("user"))
     if (user) {
       setUser(user)
     }

@@ -14,13 +14,14 @@ describe("LoginView", () => {
     const buttonSubmit = getByTestId("button-submit")
 
     act(() => {
-      fireEvent.change(emailInput, { target: { value: "email" } })
+      fireEvent.change(emailInput, { target: { value: "email@asd" } })
       fireEvent.change(passwordInput, { target: { value: "1234" } })
       fireEvent.click(buttonSubmit)
     })
+
     await waitFor(() => {
       expect(buttonSubmit).toBeDisabled()
-      expect(screen.getByDisplayValue("email")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("email@asd")).toBeInTheDocument()
       expect(screen.getByText("Invalid email")).toBeInTheDocument()
       expect(screen.getByText("Password must be at least 5 characters")).toBeInTheDocument()
     })

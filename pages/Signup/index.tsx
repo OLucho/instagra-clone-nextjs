@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik"
 import React, { useState } from "react"
 import { api } from "@/common/api"
 import { useTitle } from "@/common/hooks"
+import { useRouter } from "next/router"
 
 interface UserForm {
   name: string,
@@ -15,6 +16,7 @@ const SignupView = () => {
   const [serverError, setServerError] = useState(false)
 
   useTitle("Create an account!")
+  const router = useRouter()
 
   const initialValues = {
     name: "",
@@ -23,7 +25,7 @@ const SignupView = () => {
     password: ""
   }
 
-  const loginSchema = Yup.object().shape({
+  const signUpSchema = Yup.object().shape({
     name: Yup.string().required("Required").max(15, "Name is too big"),
     username: Yup.string().required("Required").max(15, "Username is too big"),
     email: Yup.string().email('Invalid email').required('Required'),
@@ -37,69 +39,37 @@ const SignupView = () => {
       setServerError(data.error)
       return
     }
-
     setServerError(false)
+    localStorage.setItem("user", JSON.stringify(data.user))
+    router.push("/")
   }
+
+  const inputsData = [
+    { name: "name", type: "text", placeholder: "Name", "data-testid": "name-input" },
+    { name: "username", type: "text", placeholder: "Username", "data-testid": "username-input" },
+    { name: "email", type: "text", placeholder: "Email", "data-testid": "email-input" },
+    { name: "password", type: "password", placeholder: "Password", "data-testid": "password-input" }
+  ]
+
   return (
     <div>
       <h1>Create your Instagram Account!</h1>
       {serverError && <p>{serverError}</p>}
       <Formik
         onSubmit={(values) => onSubmit(values)}
-        // @ts-ignore
         initialValues={initialValues}
-        validationSchema={loginSchema}
+        validationSchema={signUpSchema}
       >
         {(formik) => (
           <Form>
-            <div>
-              <label htmlFor="name">
-                Name
-                <Field
-                  name="name"
-                  data-testid="name-input"
-                  id="name"
+            {inputsData.map(input => (
+              <div key={input.name}>
+                <Field {...input} />
+                <ErrorMessage
+                  name={input.name}
                 />
-              </label>
-              <ErrorMessage name="name" component="span" />
-            </div>
-
-            <div>
-              <label htmlFor="username">
-                Username
-                <Field
-                  name="username"
-                  data-testid="username-input"
-                  id="username"
-                />
-              </label>
-              <ErrorMessage name="username" component="span" />
-            </div>
-
-            <div>
-              <label htmlFor="email">
-                Email
-                <Field
-                  name="email"
-                  data-testid="email-input"
-                  id="email"
-                />
-              </label>
-              <ErrorMessage name="email" component="span" />
-            </div>
-
-            <div>
-              <label htmlFor="password">
-                password
-                <Field
-                  name="password"
-                  data-testid="password-input"
-                  id="password"
-                  type="password"
-                />
-                <ErrorMessage name="password" component="span" data-testid="password" />
-              </label>
-            </div>
+              </div>
+            ))}
             <button
               data-testid="button-submit"
               type="submit"
@@ -107,11 +77,15 @@ const SignupView = () => {
               Sign up
             </button>
           </Form>
-        )
-        }
+        )}
       </Formik>
     </div>
   )
+}
+
+export async function getServerSideProps () {
+  return {
+  }
 }
 
 export default SignupView

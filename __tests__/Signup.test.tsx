@@ -15,9 +15,9 @@ describe("SignUp", () => {
     const buttonSubmit = getByTestId("button-submit")
 
     act(() => {
-      fireEvent.change(name, { target: { value: "Name too big 1234567" } })
+      fireEvent.change(name, { target: { value: "Name too bigasdsadsadasd 1234567" } })
       fireEvent.change(username, { target: { value: "123456789characterstoobig" } })
-      fireEvent.change(emailInput, { target: { value: "email" } })
+      fireEvent.change(emailInput, { target: { value: "email@." } })
       fireEvent.change(passwordInput, { target: { value: "1234" } })
       fireEvent.click(buttonSubmit)
     })

@@ -10,7 +10,7 @@ interface UserForm {
   password: string
 }
 
-export const LoginView = ({ setUser }: {setUser: React.Dispatch<React.SetStateAction<User | null>>}) => {
+export const LoginView = ({ setUser }: { setUser: React.Dispatch<React.SetStateAction<User | null>> }) => {
   const [serverError, setServerError] = useState("")
   useTitle("Login to instagram")
 
@@ -32,6 +32,22 @@ export const LoginView = ({ setUser }: {setUser: React.Dispatch<React.SetStateAc
   const onSubmit = (userForm: UserForm) => {
     handleLogin(userForm)
   }
+
+  const inputsData = [
+    {
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      "data-testid": "email-input"
+    },
+    {
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      "data-testid": "password-input"
+    }
+  ]
+
   return (
     <div>
       <h1>Instagram</h1>
@@ -47,33 +63,19 @@ export const LoginView = ({ setUser }: {setUser: React.Dispatch<React.SetStateAc
       >
         {(formik) => (
           <Form>
-            <div>
-              <label htmlFor="email">
-                <Field
-                  name="email"
-                  data-testid="email-input"
-                  id="email"
-                />
-              </label>
-              <ErrorMessage name="email" component="span" />
-            </div>
-
-            <div>
-              <label htmlFor="password">
-                <Field
-                  name="password"
-                  data-testid="password-input"
-                  id="password"
-                />
-                <ErrorMessage name="password" component="span" data-testid="password" />
-              </label>
-            </div>
+            {inputsData.map((input) => (
+              <div key={input.name}>
+                <Field {...input} />
+                <ErrorMessage name={input.name} />
+              </div>
+            ))}
             <button
               data-testid="button-submit"
               type="submit"
               disabled={!(formik.dirty && formik.isValid)}>
               Log in
             </button>
+            ))
           </Form>
         )
         }
